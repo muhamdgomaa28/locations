@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	    <meta charset="UTF-8"/>
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="view port" content="width=device-width,initial-scale=1">
+	    <title>Locations</title>
+	    <link rel="stylesheet" href="css/bootstrap.min.css" />
+	    <link rel="stylesheet" href="css/font-awesome.min.css" type="text/css">
+	    <link rel="stylesheet" href="css/hover.css" />
+	    <link rel="stylesheet" href="css/custom.css" type="text/css"/>
+	    <link rel="stylesheet" href="css/mystyle.css" type="text/css"/>
+	    <link href='https://fonts.googleapis.com/css?family=Lato:400,300,700,900,400italic' rel='stylesheet' type='text/css'>
+	    
+	    
+	    <script src="traffic_accidents.json"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+     <script src="js/traffic_accidents.json"></script>
+    <script type="text/javascript" src="js/markerclusterer.js"></script>
+    <script>
+        function initialize() {
+            var center = new google.maps.LatLng(59.9214, 10.8463);
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: center,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            var opt = {
+                "legend": {
+                    "Fatal" : "#FF0066",
+                    "Very serious injuries" : "#FF9933",
+                    "Serious injuries" : "#FFFF00" ,
+                    "Minor injuries" : "#99FF99",
+                    "No injuries" : "#66CCFF",
+                    "Not recorded" : "#A5A5A5"
+                }
+            };
+            var markers = [];
+            for (var i = 0; i < data.features.length; i++) {
+                var accident_injuries = data.features[i].properties["5074"];
+                var accident_title = "";
+                var accident_lnglat = data.features[i].geometry["coordinates"];
+                switch (Number(accident_injuries)) {
+                    case 1:
+                        accident_title = "Fatal";
+                        break;
+                    case 3:
+                        accident_title = "Serious injuries";
+                        break;
+                    case 2:
+                        accident_title = "Very serious injuries";
+                        break;
+                    case 5:
+                        accident_title = "No injuries";
+                        break;
+                    case 4:
+                        accident_title = "Minor injuries";
+                        break;
+                    case 6:
+                        accident_title = "Not recorded";
+                        break;
+                }
+                var accident_LatLng = new google.maps.LatLng(Number(accident_lnglat[1]), Number(accident_lnglat[0]));
+                var marker = new google.maps.Marker({
+                    position: accident_LatLng,
+                    title: accident_title
+                });
+                markers.push(marker);
+            }
+            var markerCluster = new MarkerClusterer(map, markers, opt);
+        }
+        google.load("visualization", "1", {packages: ["corechart"]});
+        google.setOnLoadCallback(initialize);
+    </script>
+    
+	</head>
+	
+	<body>
+
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="index.html"><img class="img-responsive" src="img/logo.png"></a>
+		    </div>
+
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		      
+		      <ul class="nav navbar-nav navbar-right">
+		        <li class="active"><a href="index.html">home</a></li>
+		        <li><a href="#">blog</a></li>
+		        <li><a href="contact.html">contact</a></li>
+		        <li><a href="signin.html">sign in</a></li>
+		        <li><a href="register.html">register</a></li>
+		        <button class="btn btn-default add-list"><a href="addlist.html" target="_blank"><i class="fa fa-plus"></i>add listing</a></button>
+		      </ul>
+		    </div><!-- /.navbar-collapse -->
+		  </div><!-- /.container-fluid -->
+		</nav>
+
+
+    <!-- PANNER SECTION ================================================= -->
+    <section class="panner">
+
+		<div class="panner-back">
+			
+			<div class="panner-content">
+				<div class="container">
+					<div class="row">
+	    				<div class="page-title">
+	    					<h1>best deals in one place</h1>
+	    					<h2>with locations you can find the best deals in your location</h2>
+						</div>
+
+						<form>
+
+							<div class="input-group">
+						    	<input type="text" name="email" class="form-control" placeholder="What are you looking for">
+						    	<span class="input-group-btn">
+						    		<button type="submit" class="btn btn-default"><i class="fa fa-long-arrow-right"></i>
+						    		</button>
+						    	</span>
+							</div>
+						    
+						</form>
+
+					</div>
+				</div>
+			</div>
+			
+    	</div>
+    	
+    </section>
+    
+    
+ <!-- MAP SECTION ========================================= -->
+    <div class="container">
+            <div class="row">
+               <div class="col-sm-12">
+                    <div id="map-container">
+                       <div id="map"></div>
+                    </div>
+                </div>
+        </div>
+        </div>
+
+    
+     
+    
+    <!-- BROWSE LISTING SECTION ================================================= -->
+    <section class="listings">
+        <h2 class="text-center">browse our listings</h2>
+        <div class="container">
+            <div class="row">
+                 
+
+                <div class=" col-sm-6">
+                    <div class="list-item">
+                        <div class="list-title">
+                            <div class="icon">
+                                <i class="fa fa-suitcase"></i>
+                            </div>
+                            <h3><a href="#">business & economy</a></h3>
+                        </div>
+
+                        <ul>
+                            <li>
+                                <a href="#">business to business</a>
+                                <figure class="count">6</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">finance</a>
+                                <figure class="count">4</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">shopping</a>
+                                <figure class="count">3</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">jobs</a>
+                                <figure class="count">5</figure>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                 
+
+                <div class=" col-sm-6">
+                    <div class="list-item">
+                        <div class="list-title">
+                            <div class="icon">
+                                <i class="fa fa-graduation-cap"></i>
+                            </div>
+                            <h3><a href="#">education</a></h3>
+                        </div>
+
+                        <ul>
+                            <li>
+                                <a href="#">distance learning</a>
+                                <figure class="count">8</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">colleages</a>
+                                <figure class="count">2</figure>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class=" col-sm-6">
+                    <div class="list-item">
+                        <div class="list-title">
+                            <div class="icon">
+                                <i class="fa fa-desktop"></i>
+                            </div>
+                            <h3><a href="#">entertainment</a></h3>
+                        </div>
+
+                        <ul>
+                            <li>
+                                <a href="#">movies</a>
+                                <figure class="count">136</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">tv show</a>
+                                <figure class="count">6</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">music</a>
+                                <figure class="count">114</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">Humor</a>
+                                <figure class="count">16</figure>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                 
+
+                 
+
+                <div class=" col-sm-6">
+                    <div class="list-item">
+                        <div class="list-title">
+                            <div class="icon">
+                                <i class="fa fa-newspaper-o"></i>
+                            </div>
+                            <h3><a href="#">News & Media</a></h3>
+                        </div>
+
+                        <ul>
+                            <li>
+                                <a href="#">newspaper</a>
+                                <figure class="count">2</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">radio</a>
+                                <figure class="count">14</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">weather</a>
+                                <figure class="count">23</figure>
+                            </li>
+
+                            <li>
+                                <a href="#">blogs</a>
+                                <figure class="count">15</figure>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- RECENT PLACES SECTION ================================================= -->
+    <section class="recent-places">
+    	<div class="container">
+    	<!--	<div class="recent-title text-center">
+    			<h2>recent places</h2>
+    			<h3>Fusce eu mollis dui, varius convallis mauris. Nam dictum id</h3>
+    		</div> -->
+    		<div class="row">
+    		
+    			 
+                   <div class=" col-sm-12">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="img/item-1.jpg" >
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading"> <a href="#"> Post Title </a> <small><i>Posted on February 19, 2016</i></small> </h4>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati explicabo voluptas mollitia quos id vel dolorem, beatae libero doloremque atque earum recusandae inventore. Quas porro, ipsum deserunt fuga, hic consequuntur.<br/>
+                        By:<a href="#">  <i>Eslam Elkhafagy </i></a>
+                      </div>
+                      
+                    </div>
+    			</div>
+    			
+    			 <div class=" col-sm-12">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="img/item-1.jpg" >
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading"> <a href="#"> Post Title </a> <small><i>Posted on February 19, 2016</i></small> </h4>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati explicabo voluptas mollitia quos id vel dolorem, beatae libero doloremque atque earum recusandae inventore. Quas porro, ipsum deserunt fuga, hic consequuntur.<br/>
+                        By:<a href="#">  <i>Eslam Elkhafagy </i></a>
+                      </div>
+                      
+                    </div>
+    			</div>
+    			
+    			 <div class=" col-sm-12">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="img/item-1.jpg" >
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading"> <a href="#"> Post Title </a> <small><i>Posted on February 19, 2016</i></small> </h4>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati explicabo voluptas mollitia quos id vel dolorem, beatae libero doloremque atque earum recusandae inventore. Quas porro, ipsum deserunt fuga, hic consequuntur.<br/>
+                        By:<a href="#">  <i>Eslam Elkhafagy </i></a>
+                      </div>
+                      
+                    </div>
+    			</div>
+    			
+    			
+    			 
+    			 
+    			 
+
+    			
+
+    			
+
+
+    			
+
+    			
+
+    			
+
+                <div class="col-md-12 text-center">
+                    <a href="listing.html" class="btn btn-primary btn-rounded">View all listings<i class="fa fa-long-arrow-right"></i></a>
+                </div>
+
+                <div class="col-md-12">
+                    <hr />
+                </div>
+    		</div>
+    	</div>
+    </section>
+
+    
+
+    <!-- SUBSCRIPE SECTION ================================================= -->
+    <section class="subscripe">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Subscribe and be notified about new locations</h3>
+                </div>
+
+                <div class="col-md-6">
+                    <form role="search">
+
+                        <div class="input-group">
+                            <input type="text" name="email" class="form-control" placeholder="What are you looking for">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-long-arrow-right"></i>
+                                </button>
+                            </span>
+                        </div>
+                            
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- RECENTLY RATED SECTION ================================================= -->
+    <section class="recently-rated">
+        <div class="container">
+            <h2>recently rated items</h2>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                
+                 <div class=" col-sm-12">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="img/item-1.jpg" >
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading"> <a href="#"> Post Title </a> <small><i>Posted on February 19, 2016</i></small> </h4>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati explicabo voluptas mollitia quos id vel dolorem, beatae libero doloremque atque earum recusandae inventore. Quas porro, ipsum deserunt fuga, hic consequuntur.<br/>
+                        By:<a href="#">  <i>Eslam Elkhafagy </i></a>
+                      </div>
+                      
+                    </div>
+    			</div>
+    			 <div class=" col-sm-12">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="img/item-1.jpg" >
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading"> <a href="#"> Post Title </a> <small><i>Posted on February 19, 2016</i></small> </h4>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati explicabo voluptas mollitia quos id vel dolorem, beatae libero doloremque atque earum recusandae inventore. Quas porro, ipsum deserunt fuga, hic consequuntur.<br/>
+                        By:<a href="#">  <i>Eslam Elkhafagy </i></a>
+                      </div>
+                      
+                    </div>
+    			</div>
+    			 <div class=" col-sm-12">
+                    <div class="media">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="img/item-1.jpg" >
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading"> <a href="#"> Post Title </a> <small><i>Posted on February 19, 2016</i></small> </h4>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati explicabo voluptas mollitia quos id vel dolorem, beatae libero doloremque atque earum recusandae inventore. Quas porro, ipsum deserunt fuga, hic consequuntur.<br/>
+                        By:<a href="#">  <i>Eslam Elkhafagy </i></a>
+                      </div>
+                      
+                    </div>
+    			</div>
+     
+
+                    
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+     
+
+    <!-- FOOTER ================================================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <p>(C) 2016 Citzen, All right reserved</p>
+                </div>
+
+                <div class="col-md-6 hidden-xs">
+                    <ul class="pull-right">
+                        <li><a href="index.html">home</a></li>
+                        <li><a href="listing.html">listings</a></li>
+                        <li><a href="addlist.html">submit item</a></li>
+                        <li><a href="contact.html">contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS ================================================= -->
+
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/smooth-scroll.min.js"></script>
+    <script src="js/jqstyles.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+ 
+    <!--[if It IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+	    
+	</body>
+</html>
