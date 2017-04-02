@@ -11,4 +11,6 @@ package com.mycompany.locations;
  */
 public class main {
     
+  
+    
 }
